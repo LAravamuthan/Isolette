@@ -2,16 +2,10 @@ package asu.edu.cse564.group16.project.isolette;
 
 public class Isolette {
 
-    private ThermoStat thermoStat;
-    private OperatorInterface isoletteOperator = new IsoletteOperator();
-    private HeatSource heatSource;
+    private OperatorInterface isoletteOperator;
 
-
-    public Isolette(ThermoStat thermoStat, OperatorInterface isoletteOperator, HeatSource heatSource) {
-        this.thermoStat = thermoStat;
+    public Isolette(OperatorInterface isoletteOperator) {
         this.isoletteOperator = isoletteOperator;
-        this.heatSource = heatSource;
     }
-
 
 }

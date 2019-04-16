@@ -1,6 +1,3 @@
-
-
-
 package asu.edu.cse564.group16.project.human;
 
 import asu.edu.cse564.group16.project.util.Condition;

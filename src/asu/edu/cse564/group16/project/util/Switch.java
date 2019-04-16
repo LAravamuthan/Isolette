@@ -1,8 +1,8 @@
 package asu.edu.cse564.group16.project.util;
 
 public enum Switch {
-    ON(0, "On"),
-    OFF(1, "Off");
+    ON(1, "On"),
+    OFF(0, "Off");
 
     private int index;
     private String label;

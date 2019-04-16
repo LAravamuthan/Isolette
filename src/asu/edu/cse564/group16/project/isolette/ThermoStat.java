@@ -1,15 +1,16 @@
 package asu.edu.cse564.group16.project.isolette;
 
 public class ThermoStat {
+
     private TemperatureSensor temperatureSensor;
     private IsoletteTemperatureRangeConfig isoletteTemperatureRangeConfig;
-
 
     public ThermoStat(TemperatureSensor temperatureSensor,
                       IsoletteTemperatureRangeConfig isoletteTemperatureRangeConfig) {
 
         this.temperatureSensor = temperatureSensor;
         this.isoletteTemperatureRangeConfig = isoletteTemperatureRangeConfig;
+
     }
 
     public TemperatureSensor getTemperatureSensor() {
@@ -19,7 +20,6 @@ public class ThermoStat {
     public void setTemperatureSensor(TemperatureSensor temperatureSensor) {
         this.temperatureSensor = temperatureSensor;
     }
-
 
 
     public IsoletteTemperatureRangeConfig getIsoletteTemperatureRangeConfig() {
