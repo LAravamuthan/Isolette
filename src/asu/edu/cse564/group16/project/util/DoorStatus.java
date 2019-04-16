@@ -5,19 +5,24 @@
  */
 
 
-
-
 package asu.edu.cse564.group16.project.util;
 
-public enum Status {
+public enum DoorStatus {
 
-    INIT(0, "Init"),
-    NORMAL(1, "Normal"),
-    FAILURE(2, "Failure");
+    OPEN(0, "Open", false),
+    CLOSED(1, "Closed", true);
 
     private int index;
     private String label;
+    private boolean boolValue;
 
+    public boolean isBoolValue() {
+        return boolValue;
+    }
+
+    public void setBoolValue(boolean boolValue) {
+        this.boolValue = boolValue;
+    }
 
     public int getIndex() {
         return index;
@@ -35,8 +40,9 @@ public enum Status {
         this.label = label;
     }
 
-    Status(int index, String label){
+    DoorStatus(int index, String label, boolean boolValue){
         this.index = index;
         this.label = label;
+        this.boolValue = boolValue;
     }
 }

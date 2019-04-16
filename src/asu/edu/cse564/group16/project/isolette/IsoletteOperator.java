@@ -1,3 +1,11 @@
+/**
+ * @author Aravamuthan Lakshminarayanan
+ * @author Bhavana Vakkalagadda
+ * @project Isolette
+ */
+
+
+
 package asu.edu.cse564.group16.project.isolette;
 
 import asu.edu.cse564.group16.project.human.Infant;
@@ -121,6 +129,11 @@ public class IsoletteOperator implements OperatorInterface {
     public Switch switchOffAlarm() {
         getMonitorSystem().switchOffAlarm();
         return getMonitorSystem().getAlarmStatus();
+    }
+
+    @Override
+    public void putInfant(Infant infant) {
+        setInfant(infant);
     }
 
 }
