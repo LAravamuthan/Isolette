@@ -1,8 +1,10 @@
 /**
  * @author Aravamuthan Lakshminarayanan
  * @author Bhavana Vakkalagadda
+ * @author Namratha
  * @project Isolette
  */
+
 
 
 package asu.edu.cse564.group16.project.isolette;
@@ -14,7 +16,7 @@ import asu.edu.cse564.group16.project.util.Switch;
 import asu.edu.cse564.group16.project.util.Temperature;
 
 
-public class Isolette implements Runnable {
+public class Isolette {
 
     private Switch isoletteSwitch;
     private DoorStatus doorStatus;
@@ -51,10 +53,6 @@ public class Isolette implements Runnable {
         this.isoletteOperator = isoletteOperator;
         this.isoletteSwitch = Switch.OFF;
         this.doorStatus = DoorStatus.CLOSED;
-    }
-
-    public void run(){
-        System.out.println("Hi here");
     }
 
     public void setTemperatureRangeAndConfig(IsoletteTemperatureRangeConfig isoletteTemperatureRangeConfig){
@@ -101,5 +99,5 @@ public class Isolette implements Runnable {
     public Status getMonitorStatus(){
         return getIsoletteOperator().getMonitorStatus();
     }
-    
+
 }
