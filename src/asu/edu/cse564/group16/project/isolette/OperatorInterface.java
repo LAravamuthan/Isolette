@@ -33,4 +33,8 @@ public interface OperatorInterface {
 
     public TemperatureRange getAlarmTemperatureRange();
 
+    public ThermoStat getThermoStat();
+
+    public void setThermoStat(ThermoStat thermoStat);
+
 }
