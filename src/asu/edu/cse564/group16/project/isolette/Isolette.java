@@ -6,7 +6,6 @@
  */
 
 
-
 package asu.edu.cse564.group16.project.isolette;
 
 import asu.edu.cse564.group16.project.human.Infant;
@@ -20,16 +19,7 @@ public class Isolette {
 
     private Switch isoletteSwitch;
     private DoorStatus doorStatus;
-
-
-    public DoorStatus getDoorStatus() {
-        return doorStatus;
-    }
-
-    public void setDoorStatus(DoorStatus doorStatus) {
-        this.doorStatus = doorStatus;
-    }
-
+    private Infant infant;
     private OperatorInterface isoletteOperator;
 
     public Switch getIsoletteSwitch() {
@@ -40,6 +30,22 @@ public class Isolette {
         this.isoletteSwitch = isoletteSwitch;
     }
 
+    public DoorStatus getDoorStatus() {
+        return doorStatus;
+    }
+
+    public void setDoorStatus(DoorStatus doorStatus) {
+        this.doorStatus = doorStatus;
+    }
+
+    public Infant getInfant() {
+        return infant;
+    }
+
+    public void setInfant(Infant infant) {
+        this.infant = infant;
+    }
+
     public OperatorInterface getIsoletteOperator() {
         return isoletteOperator;
     }
@@ -48,55 +54,55 @@ public class Isolette {
         this.isoletteOperator = isoletteOperator;
     }
 
-
-    public Isolette(OperatorInterface isoletteOperator) {
+    public Isolette(OperatorInterface isoletteOperator, Infant infant) {
         this.isoletteOperator = isoletteOperator;
         this.isoletteSwitch = Switch.OFF;
         this.doorStatus = DoorStatus.CLOSED;
+        this.infant = infant;
     }
 
-    public void setTemperatureRangeAndConfig(IsoletteTemperatureRangeConfig isoletteTemperatureRangeConfig){
+    public void setTemperatureRangeAndConfig(IsoletteTemperatureRangeConfig isoletteTemperatureRangeConfig) {
         getIsoletteOperator().setIsoletteConfig(isoletteTemperatureRangeConfig);
     }
 
-    public void switchOnIsolette(){
+    public void switchOnIsolette() {
         isoletteSwitch = Switch.ON;
     }
 
-    public Switch switchOffAlarm(){
+    public Switch switchOffAlarm() {
         return getIsoletteOperator().switchOffAlarm();
     }
 
-    public void putInfant(Infant infant){
+    public void putInfant(Infant infant) {
         setDoorStatus(DoorStatus.OPEN);
-        getIsoletteOperator().putInfant(infant);
+        setInfant(infant);
         setDoorStatus(DoorStatus.CLOSED);
     }
 
-    public Infant removeInfant(){
+    public Infant removeInfant() {
         setDoorStatus(DoorStatus.OPEN);
-        Infant infant = getIsoletteOperator().getInfant();
+        Infant infant = getInfant();
         setDoorStatus(DoorStatus.CLOSED);
         return infant;
     }
 
-    public void openDoor(){
+    public void openDoor() {
         setDoorStatus(DoorStatus.OPEN);
     }
 
-    public void closeDoor(){
+    public void closeDoor() {
         setDoorStatus(DoorStatus.CLOSED);
     }
 
-    public Temperature getTemperature(){
+    public Temperature getTemperature() {
         return getIsoletteOperator().getCurrentTemperature();
     }
 
-    public Status getRegulatorStatus(){
+    public Status getRegulatorStatus() {
         return getIsoletteOperator().getRegulatorStatus();
     }
 
-    public Status getMonitorStatus(){
+    public Status getMonitorStatus() {
         return getIsoletteOperator().getMonitorStatus();
     }
 

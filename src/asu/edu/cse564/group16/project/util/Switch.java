@@ -10,12 +10,20 @@
 package asu.edu.cse564.group16.project.util;
 
 public enum Switch {
-    ON(1, "On"),
-    OFF(0, "Off");
+    ON(1, "On", true),
+    OFF(0, "Off", false);
 
     private int index;
     private String label;
+    private boolean boolValue;
 
+    public boolean isBoolValue() {
+        return boolValue;
+    }
+
+    public void setBoolValue(boolean boolValue) {
+        this.boolValue = boolValue;
+    }
 
     public int getIndex() {
         return index;
@@ -33,8 +41,9 @@ public enum Switch {
         this.label = label;
     }
 
-    Switch(int index, String label) {
+    Switch(int index, String label, boolean boolValue) {
         this.index = index;
         this.label = label;
+        this.boolValue = boolValue;
     }
 }

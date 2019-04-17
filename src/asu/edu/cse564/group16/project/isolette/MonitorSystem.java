@@ -6,17 +6,34 @@
  */
 
 
-
 package asu.edu.cse564.group16.project.isolette;
 
 import asu.edu.cse564.group16.project.util.Status;
 import asu.edu.cse564.group16.project.util.Switch;
 import asu.edu.cse564.group16.project.util.TemperatureRange;
 
-public class MonitorSystem implements MonitorInterface {
+public class MonitorSystem implements MonitorInterface, Runnable {
 
     private Status monitorStatus = Status.FAILURE;
     private AlarmSystem alarmSystem;
+    private TemperatureRange alarmTemperatureRange;
+    private TemperatureSensor temperatureSensor;
+
+    public TemperatureSensor getTemperatureSensor() {
+        return temperatureSensor;
+    }
+
+    public void setTemperatureSensor(TemperatureSensor temperatureSensor) {
+        this.temperatureSensor = temperatureSensor;
+    }
+
+    public TemperatureRange getAlarmTemperatureRange() {
+        return alarmTemperatureRange;
+    }
+
+    public void setAlarmTemperatureRange(TemperatureRange alarmTemperatureRange) {
+        this.alarmTemperatureRange = alarmTemperatureRange;
+    }
 
     public AlarmSystem getAlarmSystem() {
         return alarmSystem;
@@ -26,9 +43,10 @@ public class MonitorSystem implements MonitorInterface {
         this.alarmSystem = alarmSystem;
     }
 
-    public MonitorSystem(Status monitorStatus, AlarmSystem alarmSystem) {
-        this.monitorStatus = monitorStatus;
+    public MonitorSystem(AlarmSystem alarmSystem, TemperatureRange alarmTemperatureRange, TemperatureSensor temperatureSensor) {
         this.alarmSystem = alarmSystem;
+        this.alarmTemperatureRange = alarmTemperatureRange;
+        this.temperatureSensor = temperatureSensor;
     }
 
     public Status getMonitorStatus() {
@@ -40,9 +58,19 @@ public class MonitorSystem implements MonitorInterface {
     }
 
     @Override
-    public void monitorTemperature(TemperatureRange alarmTemperatureRange) {
-        //TODO
-        // regulate Isolette Temperature using Heat Source, Desired TemperatureRange and Air Temperature
+    public void monitorTemperature(TemperatureRange alarmTemperatureRange, TemperatureSensor temperatureSensor, AlarmSystem alarmSystem) {
+
+        if (temperatureSensor.getCurrentTemperature().getValue() >=
+                alarmTemperatureRange.getHigherTemperature().getValue()) {
+            alarmSystem.switchOnAlarm();
+        } else if (temperatureSensor.getCurrentTemperature().getValue() <=
+                alarmTemperatureRange.getLowerTemperature().getValue()) {
+            alarmSystem.switchOnAlarm();
+        } else {
+            if (alarmSystem.getAlarmSwtich().isBoolValue()) {
+                alarmSystem.switchOffAlarm();
+            }
+        }
     }
 
     @Override
@@ -66,4 +94,11 @@ public class MonitorSystem implements MonitorInterface {
     }
 
 
+    @Override
+    public void run() {
+        while (getMonitorStatus() != Status.FAILURE) {
+            monitorTemperature(getAlarmTemperatureRange(), getTemperatureSensor(), getAlarmSystem());
+        }
+
+    }
 }

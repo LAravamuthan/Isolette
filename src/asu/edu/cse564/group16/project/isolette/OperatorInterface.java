@@ -13,6 +13,7 @@ import asu.edu.cse564.group16.project.human.Infant;
 import asu.edu.cse564.group16.project.util.Status;
 import asu.edu.cse564.group16.project.util.Switch;
 import asu.edu.cse564.group16.project.util.Temperature;
+import asu.edu.cse564.group16.project.util.TemperatureRange;
 
 public interface OperatorInterface {
 
@@ -28,8 +29,8 @@ public interface OperatorInterface {
 
     public Switch switchOffAlarm();
 
-    public void putInfant(Infant infant);
+    public TemperatureRange getDesiredTemperatureRange();
 
-    public Infant getInfant();
+    public TemperatureRange getAlarmTemperatureRange();
 
 }

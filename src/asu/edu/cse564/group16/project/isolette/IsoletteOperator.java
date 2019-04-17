@@ -9,7 +9,6 @@
 
 package asu.edu.cse564.group16.project.isolette;
 
-import asu.edu.cse564.group16.project.human.Infant;
 import asu.edu.cse564.group16.project.util.Status;
 import asu.edu.cse564.group16.project.util.Switch;
 import asu.edu.cse564.group16.project.util.Temperature;
@@ -19,54 +18,14 @@ public class IsoletteOperator implements OperatorInterface {
 
     private TemperatureRange desiredTemperatureRange;
     private TemperatureRange alarmTemperatureRange;
-    private RegulateInterface regulatorSystem;
-    private MonitorInterface monitorSystem;
     private ThermoStat thermoStat;
-    private Air air;
-    private Infant infant;
 
-    public IsoletteOperator(TemperatureRange desiredTemperatureRange, TemperatureRange alarmTemperatureRange,
-                            RegulateInterface regulatorSystem,
-                            MonitorInterface monitorSystem, ThermoStat thermoStat, Air air, Infant infant) {
-        this.desiredTemperatureRange = desiredTemperatureRange;
-        this.alarmTemperatureRange = alarmTemperatureRange;
-        this.regulatorSystem = regulatorSystem;
-        this.monitorSystem = monitorSystem;
+    public IsoletteOperator(ThermoStat thermoStat) {
         this.thermoStat = thermoStat;
-        this.air = air;
-        this.infant = infant;
     }
 
-    public RegulateInterface getRegulatorSystem() {
-        return regulatorSystem;
-    }
-
-    public void setRegulatorSystem(RegulateInterface regulatorSystem) {
-        this.regulatorSystem = regulatorSystem;
-    }
-
-    public MonitorInterface getMonitorSystem() {
-        return monitorSystem;
-    }
-
-    public void setMonitorSystem(MonitorInterface monitorSystem) {
-        this.monitorSystem = monitorSystem;
-    }
-
-    public Air getAir() {
-        return air;
-    }
-
-    public void setAir(Air air) {
-        this.air = air;
-    }
-
-    public Infant getInfant() {
-        return infant;
-    }
-
-    public void setInfant(Infant infant) {
-        this.infant = infant;
+    public ThermoStat getThermoStat() {
+        return thermoStat;
     }
 
     public TemperatureRange getDesiredTemperatureRange() {
@@ -86,13 +45,7 @@ public class IsoletteOperator implements OperatorInterface {
     }
 
 
-    public void setMonitorSystem(MonitorSystem monitorSystem) {
-        this.monitorSystem = monitorSystem;
-    }
 
-    public ThermoStat getThermoStat() {
-        return thermoStat;
-    }
 
     public void setThermoStat(ThermoStat thermoStat) {
         this.thermoStat = thermoStat;
@@ -100,12 +53,12 @@ public class IsoletteOperator implements OperatorInterface {
 
     @Override
     public Status getRegulatorStatus() {
-        return getRegulatorSystem().getRegulatorStatusMethod();
+        return getThermoStat().getRegulatorSystem().getRegulatorStatusMethod();
     }
 
     @Override
     public Status getMonitorStatus() {
-        return getMonitorSystem().getMonitorStatusMethod();
+        return getThermoStat().getMonitorSystem().getMonitorStatusMethod();
     }
 
     @Override
@@ -115,26 +68,23 @@ public class IsoletteOperator implements OperatorInterface {
 
     @Override
     public void setIsoletteConfig(IsoletteTemperatureRangeConfig isoletteTemperatureRangeConfig) {
-        getDesiredTemperatureRange().setHigherTemperature(isoletteTemperatureRangeConfig.getUdTemp());
-        getDesiredTemperatureRange().setLowerTemperature(isoletteTemperatureRangeConfig.getLdTemp());
-        getAlarmTemperatureRange().setLowerTemperature(isoletteTemperatureRangeConfig.getLaTemp());
-        getAlarmTemperatureRange().setHigherTemperature(isoletteTemperatureRangeConfig.getUaTemp());
+        TemperatureRange desireTemperatureRange = new TemperatureRange(isoletteTemperatureRangeConfig.getLdTemp(),
+                isoletteTemperatureRangeConfig.getUdTemp());
+        TemperatureRange alarmTemperatureRange = new TemperatureRange(isoletteTemperatureRangeConfig.getLaTemp(),
+                isoletteTemperatureRangeConfig.getUaTemp());
+        setDesiredTemperatureRange(desireTemperatureRange);
+        setAlarmTemperatureRange(alarmTemperatureRange);
     }
 
     @Override
     public Temperature getCurrentTemperature() {
-        return getThermoStat().getTemperatureSensor().getCurrentTemperature(air, infant);
+        return getThermoStat().getTemperatureSensor().getCurrentTemperature();
     }
 
     @Override
     public Switch switchOffAlarm() {
-        getMonitorSystem().switchOffAlarm();
-        return getMonitorSystem().getAlarmStatus();
-    }
-
-    @Override
-    public void putInfant(Infant infant) {
-        setInfant(infant);
+        getThermoStat().getMonitorSystem().switchOffAlarm();
+        return getThermoStat().getMonitorSystem().getAlarmStatus();
     }
 
 }

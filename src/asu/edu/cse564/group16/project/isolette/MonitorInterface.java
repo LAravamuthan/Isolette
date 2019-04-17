@@ -15,7 +15,7 @@ import asu.edu.cse564.group16.project.util.TemperatureRange;
 
 public interface MonitorInterface {
 
-    public void monitorTemperature(TemperatureRange alarmTemperatureRange);
+    public void monitorTemperature(TemperatureRange alarmTemperatureRange, TemperatureSensor temperatureSensor, AlarmSystem alarmSystem);
 
     public Status getMonitorStatusMethod();
 
