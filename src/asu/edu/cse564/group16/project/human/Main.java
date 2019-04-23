@@ -36,6 +36,7 @@ public class Main {
         ThermoStat thermoStat1 = new ThermoStat(temperatureSensor, isoletteTemperatureRangeConfig, regulateInterface, monitorInterface);
         operatorInterface.setThermoStat(thermoStat1);
         Isolette isolette1 = new Isolette(operatorInterface, infant);
+        System.out.println(isolette1.getTemperature());
 
     }
 
