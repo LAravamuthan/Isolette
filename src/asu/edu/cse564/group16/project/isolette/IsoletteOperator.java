@@ -5,9 +5,8 @@
  * @project Isolette
  */
 
-
-
 package asu.edu.cse564.group16.project.isolette;
+
 
 import asu.edu.cse564.group16.project.util.Status;
 import asu.edu.cse564.group16.project.util.Switch;
@@ -44,9 +43,6 @@ public class IsoletteOperator implements OperatorInterface {
         this.alarmTemperatureRange = alarmTemperatureRange;
     }
 
-
-
-
     public void setThermoStat(ThermoStat thermoStat) {
         this.thermoStat = thermoStat;
     }
@@ -78,7 +74,7 @@ public class IsoletteOperator implements OperatorInterface {
 
     @Override
     public Temperature getCurrentTemperature() {
-        return getThermoStat().getTemperatureSensor().getCurrentTemperature();
+        return getThermoStat().getMonitorSystem().getTemperatureSensor().getCurrentTemperature();
     }
 
     @Override
@@ -86,5 +82,4 @@ public class IsoletteOperator implements OperatorInterface {
         getThermoStat().getMonitorSystem().switchOffAlarm();
         return getThermoStat().getMonitorSystem().getAlarmStatus();
     }
-
 }

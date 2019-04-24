@@ -58,22 +58,30 @@ public class RegulatorSystem implements RegulateInterface, Runnable {
     }
 
     @Override
-    public void regulateTemperature(TemperatureRange desiredTemperatureRange, HeatSource heatSource,
-                                    TemperatureSensor temperatureSensor) {
-        if(temperatureSensor.getCurrentTemperature().getValue() >=
-                desiredTemperatureRange.getHigherTemperature().getValue()){
-            heatSource.setHeatControlSwtich(Switch.OFF);
-        }else if(temperatureSensor.getCurrentTemperature().getValue() <=
-                desiredTemperatureRange.getLowerTemperature().getValue()){
-            heatSource.setHeatControlSwtich(Switch.ON);
-        }
-        if(heatSource.getHeatControlSwtich().isBoolValue()){
-            heatSource.heatAir();
-        }else{
-            heatSource.coolAir();
-        }
-    }
+    public void regulateTemperature() {
 
+        if (getTemperatureSensor().getCurrentTemperature().getValue() <=
+                (getDesiredTemperatureRange().getHigherTemperature().getValue() - 0.1) &&
+                getTemperatureSensor().getCurrentTemperature().getValue() >=
+                        (getDesiredTemperatureRange().getLowerTemperature().getValue() + 0.1)) {
+            getHeatSource().setHeatControlSwtich(getHeatSource().getHeatControlSwtich());
+        } else if (getTemperatureSensor().getCurrentTemperature().getValue() >=
+                getDesiredTemperatureRange().getHigherTemperature().getValue()) {
+            getHeatSource().setHeatControlSwtich(Switch.OFF);
+        } else if (getTemperatureSensor().getCurrentTemperature().getValue() <=
+                getDesiredTemperatureRange().getLowerTemperature().getValue()) {
+            getHeatSource().setHeatControlSwtich(Switch.ON);
+        }
+
+
+        if (getHeatSource().getHeatControlSwtich().isBoolValue()) {
+            getHeatSource().heatAir();
+        } else {
+            getHeatSource().coolAir();
+        }
+
+
+    }
 
 
     @Override
@@ -83,8 +91,8 @@ public class RegulatorSystem implements RegulateInterface, Runnable {
 
     @Override
     public void run() {
-        while (getRegulatorStatus() != Status.FAILURE){
-            regulateTemperature(getDesiredTemperatureRange(), getHeatSource(), getTemperatureSensor());
+        while (getRegulatorStatus() != Status.FAILURE) {
+            regulateTemperature();
         }
     }
 }

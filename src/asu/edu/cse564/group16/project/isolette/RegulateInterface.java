@@ -13,8 +13,19 @@ import asu.edu.cse564.group16.project.util.TemperatureRange;
 
 public interface RegulateInterface {
 
-    public void regulateTemperature(TemperatureRange desiredTemperatureRange, HeatSource heatSource,
-                                    TemperatureSensor temperatureSensor);
+    public void regulateTemperature();
 
     public Status getRegulatorStatusMethod();
+
+    public TemperatureRange getDesiredTemperatureRange();
+
+    public void setDesiredTemperatureRange(TemperatureRange desiredTemperatureRange);
+
+    public HeatSource getHeatSource();
+
+    public void setHeatSource(HeatSource heatSource);
+
+    public TemperatureSensor getTemperatureSensor();
+
+    public void setTemperatureSensor(TemperatureSensor temperatureSensor);
 }

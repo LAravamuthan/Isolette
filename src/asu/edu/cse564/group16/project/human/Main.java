@@ -10,40 +10,125 @@ package asu.edu.cse564.group16.project.human;
 
 import asu.edu.cse564.group16.project.isolette.*;
 import asu.edu.cse564.group16.project.util.*;
+
+import java.util.Scanner;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+@SuppressWarnings("Duplicates")
 public class Main {
 
     public static void main(String[] args) {
-        Temperature lowerDesiredTemperature = new Temperature((float) 97.0, TemperatureStatus.VALID);
-        Temperature higherDesiredTemperature = new Temperature((float) 98.0, TemperatureStatus.VALID);
-        Temperature lowerAlarmTemperature = new Temperature((float) 93.0, TemperatureStatus.VALID);
-        Temperature higherAlarmTemperature = new Temperature((float) 103.0, TemperatureStatus.VALID);
-        AlarmSystem alarmSystem = new AlarmSystem(Switch.OFF);
-        IsoletteTemperatureRangeConfig isoletteTemperatureRangeConfig = new IsoletteTemperatureRangeConfig(lowerDesiredTemperature,
-                higherDesiredTemperature, lowerAlarmTemperature, higherAlarmTemperature);
-        Air air = new Air(new Temperature((float) 97.0, TemperatureStatus.VALID));
-        HeatSource heatSource = new HeatSource(Switch.OFF, air, (float) 1.0);
-        TemperatureSensor temperatureSensor = new TemperatureSensor(air);
-        Infant infant = null;
-        OperatorInterface operatorInterface = new IsoletteOperator(null);
-        operatorInterface.setIsoletteConfig(isoletteTemperatureRangeConfig);
-        TemperatureRange desiredTemperatureRange = operatorInterface.getDesiredTemperatureRange();
-        TemperatureRange alarmTemperatureRange = operatorInterface.getAlarmTemperatureRange();
-        MonitorInterface monitorInterface = new MonitorSystem(alarmSystem, alarmTemperatureRange, temperatureSensor);
-        RegulateInterface regulateInterface = new RegulatorSystem(heatSource, desiredTemperatureRange, temperatureSensor);
-        ThermoStat thermoStat1 = new ThermoStat(temperatureSensor, isoletteTemperatureRangeConfig, regulateInterface, monitorInterface);
-        operatorInterface.setThermoStat(thermoStat1);
-        Isolette isolette1 = new Isolette(operatorInterface, infant);
 
+        int n;
+        int round = 40;
+        Scanner input = new Scanner(System.in);
+        Isolette isolette = null;
+
+        while (true) { // Condition in while loop is always true here
+            System.out.println("Select from below");
+            System.out.println("type 1 for updating temperature ranges");
+            System.out.println("type 2 for updating Air temperature");
+            System.out.println("type 3 for puting baby inside the isolette");
+            System.out.println("type 4 for remove baby from isolette");
+            System.out.println("type 5 for running next " + round + " rounds");
+            System.out.println("type 6 for setting the Heat Increment or Decrement per round");
+            System.out.println("type 7 to set no. of rounds to test");
+            System.out.println("type 0 exit");
+            n = input.nextInt();
+            if (n == 1) {
+                System.out.println("Type the Lower desired Tempereture");
+                Float ldt = input.nextFloat();
+                System.out.println("Type the Upper desired Tempereture");
+                Float udt = input.nextFloat();
+                System.out.println("Type the Lower alarm Tempereture");
+                Float lat = input.nextFloat();
+                System.out.println("Type the Upper alarm Tempereture");
+                Float uat = input.nextFloat();
+                if (isolette == null) {
+                    isolette = Isolette.initialiseIsolette(ldt, udt, lat, uat, null, (float) 70.0, (float) 0.1);
+                } else {
+                    Temperature lowerDesiredTemperature = new Temperature(ldt, TemperatureStatus.VALID);
+                    Temperature higherDesiredTemperature = new Temperature(udt, TemperatureStatus.VALID);
+                    Temperature lowerAlarmTemperature = new Temperature(lat, TemperatureStatus.VALID);
+                    Temperature higherAlarmTemperature = new Temperature(uat, TemperatureStatus.VALID);
+                    IsoletteTemperatureRangeConfig isoletteTemperatureRangeConfig = new IsoletteTemperatureRangeConfig(lowerDesiredTemperature,
+                            higherDesiredTemperature, lowerAlarmTemperature, higherAlarmTemperature);
+                    isolette.getIsoletteOperator().setIsoletteConfig(isoletteTemperatureRangeConfig);
+                    isolette.getIsoletteOperator().getThermoStat().getRegulatorSystem().
+                            setDesiredTemperatureRange(isolette.getIsoletteOperator().getDesiredTemperatureRange());
+                    isolette.getIsoletteOperator().getThermoStat().getMonitorSystem().
+                            setAlarmTemperatureRange(isolette.getIsoletteOperator().getAlarmTemperatureRange());
+
+                }
+                regulateMonitor(isolette);
+            } else if (n == 2) {
+                System.out.println("Type the desired Air Tempereture");
+                Float at = input.nextFloat();
+                Temperature airTemperature = new Temperature(at, TemperatureStatus.VALID);
+                isolette.getIsoletteOperator().getThermoStat().getRegulatorSystem().getHeatSource().
+                        getAir().setAirTemperature(airTemperature);
+
+                isolette.getIsoletteOperator().getThermoStat().getRegulatorSystem().getTemperatureSensor().
+                        getAir().setAirTemperature(airTemperature);
+
+                isolette.getIsoletteOperator().getThermoStat().getMonitorSystem().getTemperatureSensor().
+                        getAir().setAirTemperature(airTemperature);
+            }else if (n==3) {
+                Infant infant = new Infant(new Temperature((float) 98.0, TemperatureStatus.VALID));
+                isolette.setInfant(infant);
+            }else if (n == 4){
+                isolette.setInfant(null);
+            }else if (n == 5){
+                System.out.println("Air temperature :"  +
+                        isolette.getIsoletteOperator().getCurrentTemperature());
+                System.out.println("Alarm Status :"  +
+                        isolette.getIsoletteOperator().getThermoStat().getMonitorSystem().getAlarmStatus());
+                System.out.println("Heat Source Rate: "  +
+                        isolette.getIsoletteOperator().getThermoStat().getRegulatorSystem().getHeatSource().getHeatIncreaseRate());
+                System.out.println("Infant Status: "  +
+                        isolette.getInfant());
+                for(int i =0; i < round; i ++){
+                    regulateMonitor(isolette);
+                }
+                System.out.println("Various Systems after " + round + " round ");
+                System.out.println("Air temperature :"  +
+                        isolette.getIsoletteOperator().getCurrentTemperature());
+                System.out.println("Alarm Status :"  +
+                        isolette.getIsoletteOperator().getThermoStat().getMonitorSystem().getAlarmStatus());
+                System.out.println("Heat Source Rate: "  +
+                        isolette.getIsoletteOperator().getThermoStat().getRegulatorSystem().getHeatSource().getHeatIncreaseRate());
+                System.out.println("Infant Status: "  +
+                        isolette.getInfant());
+            }else if(n == 6){
+                System.out.println("Heat rate : ");
+                Float rt = input.nextFloat();
+                isolette.getIsoletteOperator().getThermoStat().getRegulatorSystem().getHeatSource().setHeatIncreaseRate(rt);
+            }
+            else if(n == 7){
+                System.out.println("No. of rounds to run in one go : ");
+                round = input.nextInt();
+            }
+
+            if (n == 0) {
+                System.out.println("Bye Bye! " + n);
+                break;
+            }
+        }
     }
 
-    public static void addThreads(Isolette isolette1){
+    public static void regulateMonitor(Isolette isolette){
+        isolette.getIsoletteOperator().getThermoStat().getRegulatorSystem().
+                regulateTemperature();
+        isolette.getIsoletteOperator().getThermoStat().getMonitorSystem().monitorTemperature
+                ();
+    }
+
+    public static void addThreads(Isolette isolette) {
         ScheduledThreadPoolExecutor threadPool = new ScheduledThreadPoolExecutor(5);
-        threadPool.scheduleAtFixedRate((MonitorSystem)isolette1.getIsoletteOperator().getThermoStat().getMonitorSystem(),
-                0, 5, TimeUnit.SECONDS);
-        threadPool.scheduleAtFixedRate((RegulatorSystem)isolette1.getIsoletteOperator().getThermoStat().getRegulatorSystem(),
-                0, 5, TimeUnit.SECONDS);
+        threadPool.scheduleAtFixedRate((MonitorSystem) isolette.getIsoletteOperator().getThermoStat().getMonitorSystem(),
+                0, 100, TimeUnit.MILLISECONDS);
+        threadPool.scheduleAtFixedRate((RegulatorSystem) isolette.getIsoletteOperator().getThermoStat().getRegulatorSystem(),
+                0, 100, TimeUnit.SECONDS);
     }
 }

@@ -58,17 +58,17 @@ public class MonitorSystem implements MonitorInterface, Runnable {
     }
 
     @Override
-    public void monitorTemperature(TemperatureRange alarmTemperatureRange, TemperatureSensor temperatureSensor, AlarmSystem alarmSystem) {
+    public void monitorTemperature() {
 
-        if (temperatureSensor.getCurrentTemperature().getValue() >=
-                alarmTemperatureRange.getHigherTemperature().getValue()) {
-            alarmSystem.switchOnAlarm();
-        } else if (temperatureSensor.getCurrentTemperature().getValue() <=
-                alarmTemperatureRange.getLowerTemperature().getValue()) {
-            alarmSystem.switchOnAlarm();
+        if (getTemperatureSensor().getCurrentTemperature().getValue() >=
+                getAlarmTemperatureRange().getHigherTemperature().getValue()) {
+            getAlarmSystem().switchOnAlarm();
+        } else if (getTemperatureSensor().getCurrentTemperature().getValue() <=
+                getAlarmTemperatureRange().getLowerTemperature().getValue()) {
+            getAlarmSystem().switchOnAlarm();
         } else {
-            if (alarmSystem.getAlarmSwtich().isBoolValue()) {
-                alarmSystem.switchOffAlarm();
+            if (getAlarmSystem().getAlarmSwtich().isBoolValue()) {
+                getAlarmSystem().switchOffAlarm();
             }
         }
     }
@@ -97,7 +97,7 @@ public class MonitorSystem implements MonitorInterface, Runnable {
     @Override
     public void run() {
         while (getMonitorStatus() != Status.FAILURE) {
-            monitorTemperature(getAlarmTemperatureRange(), getTemperatureSensor(), getAlarmSystem());
+            monitorTemperature();
         }
 
     }

@@ -9,10 +9,15 @@
 
 package asu.edu.cse564.group16.project.util;
 
+import asu.edu.cse564.group16.project.isolette.ThermoStat;
+
 public enum TemperatureStatus {
 
     VALID(1, "valid", true),
     INVALID(0, "invalid", false);
+
+
+
 
     private int index;
     private String label;

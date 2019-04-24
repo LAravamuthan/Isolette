@@ -9,10 +9,7 @@
 package asu.edu.cse564.group16.project.isolette;
 
 import asu.edu.cse564.group16.project.human.Infant;
-import asu.edu.cse564.group16.project.util.DoorStatus;
-import asu.edu.cse564.group16.project.util.Status;
-import asu.edu.cse564.group16.project.util.Switch;
-import asu.edu.cse564.group16.project.util.Temperature;
+import asu.edu.cse564.group16.project.util.*;
 
 
 public class Isolette {
@@ -105,5 +102,33 @@ public class Isolette {
     public Status getMonitorStatus() {
         return getIsoletteOperator().getMonitorStatus();
     }
+
+    public static Isolette initialiseIsolette(Float ldt, Float hdt, Float lat, Float hat, Infant infant, Float initialAirTemp,
+                                   Float haatSourceCoefficient){
+        Temperature lowerDesiredTemperature = new Temperature(ldt, TemperatureStatus.VALID);
+        Temperature higherDesiredTemperature = new Temperature(hdt, TemperatureStatus.VALID);
+        Temperature lowerAlarmTemperature = new Temperature(lat, TemperatureStatus.VALID);
+        Temperature higherAlarmTemperature = new Temperature(hat, TemperatureStatus.VALID);
+        AlarmSystem alarmSystem = new AlarmSystem(Switch.OFF);
+        IsoletteTemperatureRangeConfig isoletteTemperatureRangeConfig = new IsoletteTemperatureRangeConfig(lowerDesiredTemperature,
+                higherDesiredTemperature, lowerAlarmTemperature, higherAlarmTemperature);
+        Air air = new Air(new Temperature(initialAirTemp, TemperatureStatus.VALID));
+        HeatSource heatSource = new HeatSource(Switch.OFF, air, haatSourceCoefficient);
+        TemperatureSensor temperatureSensor = new TemperatureSensor(air);
+        OperatorInterface operatorInterface = new IsoletteOperator(null);
+        operatorInterface.setIsoletteConfig(isoletteTemperatureRangeConfig);
+        TemperatureRange desiredTemperatureRange = operatorInterface.getDesiredTemperatureRange();
+        TemperatureRange alarmTemperatureRange = operatorInterface.getAlarmTemperatureRange();
+        MonitorInterface monitorInterface = new MonitorSystem(alarmSystem, alarmTemperatureRange, temperatureSensor);
+        RegulateInterface regulateInterface = new RegulatorSystem(heatSource, desiredTemperatureRange, temperatureSensor);
+        ThermoStat thermoStat1 = new ThermoStat(temperatureSensor, isoletteTemperatureRangeConfig, regulateInterface, monitorInterface);
+        operatorInterface.setThermoStat(thermoStat1);
+        Isolette isoletteInitialised = new Isolette(operatorInterface, infant);
+        return isoletteInitialised;
+    }
+
+
+
+
 
 }
