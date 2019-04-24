@@ -22,6 +22,13 @@ public class Infant {
     private Condition condition = Condition.SAFE;
 
 
+    @Override
+    public String toString() {
+        return "Infant{" +
+                "infantTemperature=" + infantTemperature +
+                '}';
+    }
+
     public Infant(Temperature infantTemperature) {
         this.infantTemperature = infantTemperature;
     }

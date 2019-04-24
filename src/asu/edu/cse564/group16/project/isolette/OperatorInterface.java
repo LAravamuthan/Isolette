@@ -24,7 +24,7 @@ public interface OperatorInterface {
 
     public void setIsoletteConfig(IsoletteTemperatureRangeConfig isoletteTemperatureRangeConfig);
 
-    public Temperature getCurrentTemperature();
+    public float getCurrentTemperature(boolean isRounded);
 
     public Switch switchOffAlarm();
 

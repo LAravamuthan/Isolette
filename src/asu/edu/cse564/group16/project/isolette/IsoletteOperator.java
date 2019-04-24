@@ -73,8 +73,11 @@ public class IsoletteOperator implements OperatorInterface {
     }
 
     @Override
-    public Temperature getCurrentTemperature() {
-        return getThermoStat().getMonitorSystem().getTemperatureSensor().getCurrentTemperature();
+    public float getCurrentTemperature(boolean isRounded) {
+        if(isRounded){
+            return Math.round(getThermoStat().getMonitorSystem().getTemperatureSensor().getCurrentTemperature().getValue());
+        }
+        return getThermoStat().getMonitorSystem().getTemperatureSensor().getCurrentTemperature().getValue();
     }
 
     @Override

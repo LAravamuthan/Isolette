@@ -10,16 +10,17 @@
 package asu.edu.cse564.group16.project.isolette;
 
 import asu.edu.cse564.group16.project.util.Temperature;
+import asu.edu.cse564.group16.project.util.TemperatureStatus;
 
 import java.util.Objects;
 
 
 public class IsoletteTemperatureRangeConfig {
 
-    private Temperature ldTemp;
-    private Temperature udTemp;
-    private Temperature laTemp;
-    private Temperature uaTemp;
+    private Temperature ldTemp = new Temperature((float) 97, TemperatureStatus.VALID);
+    private Temperature udTemp = new Temperature((float) 99, TemperatureStatus.VALID);
+    private Temperature laTemp = new Temperature((float) 93, TemperatureStatus.VALID);
+    private Temperature uaTemp = new Temperature((float) 103, TemperatureStatus.VALID);
 
 
     public IsoletteTemperatureRangeConfig(Temperature ldTemp, Temperature udTemp, Temperature laTemp, Temperature uaTemp) {
