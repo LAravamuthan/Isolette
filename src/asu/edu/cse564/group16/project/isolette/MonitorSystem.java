@@ -47,6 +47,7 @@ public class MonitorSystem implements MonitorInterface, Runnable {
         this.alarmSystem = alarmSystem;
         this.alarmTemperatureRange = alarmTemperatureRange;
         this.temperatureSensor = temperatureSensor;
+        this.monitorStatus = Status.INIT;
     }
 
     public Status getMonitorStatus() {
@@ -71,6 +72,7 @@ public class MonitorSystem implements MonitorInterface, Runnable {
                 getAlarmSystem().switchOffAlarm();
             }
         }
+        setMonitorStatus(Status.NORMAL);
     }
 
     @Override

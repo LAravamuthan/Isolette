@@ -30,6 +30,7 @@ public class RegulatorSystem implements RegulateInterface, Runnable {
         this.heatSource = heatSource;
         this.desiredTemperatureRange = desiredTemperatureRange;
         this.temperatureSensor = temperatureSensor;
+        this.regulatorStatus = Status.INIT;
     }
 
     public HeatSource getHeatSource() {
@@ -72,7 +73,7 @@ public class RegulatorSystem implements RegulateInterface, Runnable {
                 getDesiredTemperatureRange().getLowerTemperature().getValue()) {
             getHeatSource().setHeatControlSwtich(Switch.ON);
         }
-
+        setRegulatorStatus(Status.NORMAL);
 
         if (getHeatSource().getHeatControlSwtich().isBoolValue()) {
             getHeatSource().heatAir();

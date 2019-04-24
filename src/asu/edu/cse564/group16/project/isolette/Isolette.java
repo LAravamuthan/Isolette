@@ -91,10 +91,6 @@ public class Isolette {
         setDoorStatus(DoorStatus.CLOSED);
     }
 
-    public Temperature getTemperature() {
-        return getIsoletteOperator().getCurrentTemperature();
-    }
-
     public Status getRegulatorStatus() {
         return getIsoletteOperator().getRegulatorStatus();
     }
